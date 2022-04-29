@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'package:intl/intl.dart';
 
 import '../models/consumption_item.dart';
 import '../models/http_exception.dart';
@@ -8,9 +9,45 @@ import '../models/shared_data.dart' show Urls;
 
 class Consumptions with ChangeNotifier {
   List<ConsumptionItem> _items = [];
+  List<ConsumptionItem> _filteredItems = [];
+  int month = DateTime.now().month;
 
   List<ConsumptionItem> get items {
     return [..._items];
+  }
+
+  List<ConsumptionItem> get filteredItems {
+    return [..._filteredItems];
+  }
+
+  void filterItmes(int month) {
+    month = month;
+    _filteredItems = _items
+        .where(
+            (element) => DateFormat.yMMMd().parse(element.date).month == month)
+        .toList();
+
+    notifyListeners();
+  }
+
+  Future<Map<String, dynamic>> getCostsPerMonth() async {
+    double totalAmount = 0;
+    double totalLiters = 0;
+    double avgPrice = 0;
+
+    for (var element in _filteredItems) {
+      totalAmount = totalAmount + element.amount;
+      totalLiters = totalLiters + element.total;
+      avgPrice = double.parse((totalAmount / totalLiters).toStringAsFixed(2))
+          .roundToDouble();
+    }
+
+    var result = {
+      'totalAmount': totalAmount.toStringAsFixed(2),
+      'totalLiters': totalLiters.toStringAsFixed(2),
+      'avgPrice': avgPrice
+    };
+    return result;
   }
 
   Future<void> fetchConsumption() async {
@@ -28,6 +65,7 @@ class Consumptions with ChangeNotifier {
         loadedItems.add(ConsumptionItem.fromMap(temp));
       });
       _items = loadedItems;
+      filterItmes(month);
       notifyListeners();
     } catch (error) {
       rethrow;

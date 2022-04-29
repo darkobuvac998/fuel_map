@@ -66,7 +66,7 @@ class FuelListScreen extends StatelessWidget {
               ),
             ],
             title: Text(
-              'Error!',
+              'Info',
               style: Theme.of(contx).textTheme.headline6,
             ),
             content: Text(
@@ -94,12 +94,11 @@ class FuelListScreen extends StatelessWidget {
               onRefresh: () => _refreshItems(context),
               child: Consumer<Fuels>(
                 builder: (cts, fuels, _) => Container(
-                    padding: const EdgeInsets.only(
-                      top: 3.0,
-                    ),
+                  padding: const EdgeInsets.only(
+                    top: 3.0,
+                  ),
                   child: ListView.builder(
-                    itemBuilder: ((ctx, index) =>
-                        ChangeNotifierProvider.value(
+                    itemBuilder: ((ctx, index) => ChangeNotifierProvider.value(
                           value: fuels.items[index],
                           child: FuelItem(
                             key: ValueKey(

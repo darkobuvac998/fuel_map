@@ -71,7 +71,7 @@ class ConsumptionItem extends StatelessWidget {
                       height: 5,
                     ),
                     Text(
-                      '${consumption?.fuel.name}',
+                      '${consumption?.fuel.name} (${consumption?.fuel.price})',
                     )
                   ],
                 ),

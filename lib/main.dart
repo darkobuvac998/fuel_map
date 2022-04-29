@@ -36,6 +36,9 @@ class MyApp extends StatelessWidget {
           cardColor: const Color(0xfffdba25),
           fontFamily: 'Lato',
           scaffoldBackgroundColor: const Color(0xfffefeff),
+          primaryIconTheme: const IconThemeData(
+            color: Color(0xffe6341c),
+          ),
           textTheme: ThemeData.light().textTheme.copyWith(
                 bodyText1: const TextStyle(
                   color: Color(0xffffe79f),
@@ -58,6 +61,7 @@ class MyApp extends StatelessWidget {
               ),
           colorScheme: ColorScheme.fromSwatch().copyWith(
             secondary: const Color(0xffe6341c),
+            primary: const Color(0xfffdba25),
           ),
         ),
         home: GasStationsScreen(),

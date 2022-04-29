@@ -50,7 +50,7 @@ class _ConsumptionScreenState extends State<ConsumptionScreen> {
         ),
         child: BottomNavigationBar(
           unselectedItemColor: Colors.white,
-          selectedItemColor: Theme.of(context).accentColor,
+          selectedItemColor: Theme.of(context).colorScheme.secondary,
           backgroundColor: Colors.transparent,
           elevation: 0,
           currentIndex: _selectedScreen,
