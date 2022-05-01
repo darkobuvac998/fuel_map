@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fuel_map/providers/gas_station.dart';
 import 'package:provider/provider.dart';
 
+import '../models/http_exception.dart';
+import '../providers/auth.dart';
 import '../screens/gas_station_detail_screen.dart';
 import '../widgets/custom_card.dart';
 
@@ -11,6 +13,7 @@ class GasStationItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final gasStation = Provider.of<GasStation>(context, listen: false);
+    final auth = Provider.of<Auth>(context, listen: false);
     var scaffold = Scaffold.of(context);
     return Padding(
       padding: const EdgeInsets.symmetric(
@@ -71,18 +74,19 @@ class GasStationItem extends StatelessWidget {
                           color: Theme.of(context).colorScheme.secondary,
                         ),
                         onPressed: () async {
-                          // try {
-                          //   await gasStation.updateFavoriteStatus();
-                          // } catch (error) {
-                          //   var tempError = error as Error;
-                          //   scaffold.showSnackBar(
-                          //     SnackBar(
-                          //       content: Text(
-                          //         error.toString(),
-                          //       ),
-                          //     ),
-                          //   );
-                          // }
+                          try {
+                            await gasStation.updateFavoriteStatus(
+                              auth.token,
+                              auth.userId,
+                            );
+                          } catch (error) {
+                            var temp = error as HttpException;
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(temp.message),
+                              ),
+                            );
+                          }
                         },
                       ),
                     ),

@@ -12,6 +12,11 @@ class Consumptions with ChangeNotifier {
   List<ConsumptionItem> _filteredItems = [];
   int month = DateTime.now().month;
 
+  String? authToken;
+  String? userId;
+
+  Consumptions(this._items, {this.authToken, this.userId});
+
   List<ConsumptionItem> get items {
     return [..._items];
   }
@@ -26,7 +31,7 @@ class Consumptions with ChangeNotifier {
         .where(
             (element) => DateFormat.yMMMd().parse(element.date).month == month)
         .toList();
-
+    print(month);
     notifyListeners();
   }
 
@@ -51,10 +56,15 @@ class Consumptions with ChangeNotifier {
   }
 
   Future<void> fetchConsumption() async {
-    var url = Uri.parse(Urls.consumptions);
+    var url = Uri.parse(
+        '${Urls.consumptions}?auth=$authToken&orderBy="userId"&equalTo="$userId"');
     try {
       final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
+
+      if (extractedData == null) {
+        return;
+      }
 
       List<ConsumptionItem> loadedItems = [];
 
@@ -73,7 +83,7 @@ class Consumptions with ChangeNotifier {
   }
 
   Future<void> addConsumptionItem(ConsumptionItem item) async {
-    var url = Uri.parse(Urls.consumptions);
+    var url = Uri.parse('${Urls.consumptions}?auth=$authToken');
     try {
       var data = item.toMap()..remove('id');
       final response = await http.post(url, body: json.encode(data));

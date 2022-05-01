@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 
+import '../providers/auth.dart';
 import '../widgets/fuel_item.dart';
 import '../models/consumption_item.dart';
 import '../providers/consumptions.dart';
@@ -38,13 +39,14 @@ class _NewConsumptionState extends State<NewConsumption> {
         Provider.of<Fuels>(context, listen: false).getFuelById(widget.fuelId);
     final total = double.parse(
         (double.parse(amountCtl.text) / fuel.price).toStringAsPrecision(2));
-    print(total);
+
     var item = ConsumptionItem(
       amount: double.parse(amountCtl.text),
       date: dateCtl.text,
       fuel: fuel,
       id: '',
       total: total,
+      userId: Provider.of<Auth>(context, listen: false).userId as String,
     );
 
     try {
@@ -101,12 +103,16 @@ class _NewConsumptionState extends State<NewConsumption> {
             child: child!);
       },
       context: ctx,
-      initialDate: DateTime.now(),
+      initialDate: dateCtl.text != ''
+          ? DateFormat.yMMMd().parse(dateCtl.text)
+          : DateTime.now(),
       firstDate: DateTime(2021),
       lastDate: DateTime.now(),
     );
 
-    dateCtl.text = DateFormat.yMMMd().format(date ?? DateTime.now());
+    if (date != null) {
+      dateCtl.text = DateFormat.yMMMd().format(date);
+    }
   }
 
   @override

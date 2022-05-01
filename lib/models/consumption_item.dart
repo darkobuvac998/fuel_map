@@ -9,13 +9,15 @@ class ConsumptionItem {
   final double amount;
   final double total;
   final String date;
+  final String userId;
 
   ConsumptionItem(
       {required this.id,
       required this.fuel,
       required this.amount,
       required this.total,
-      required this.date});
+      required this.date,
+      required this.userId});
 
   Map<String, dynamic> toMap() {
     final result = <String, dynamic>{};
@@ -25,6 +27,7 @@ class ConsumptionItem {
     result.addAll({'amount': amount});
     result.addAll({'total': total});
     result.addAll({'date': date});
+    result.addAll({'userId': userId});
 
     return result;
   }
@@ -36,6 +39,7 @@ class ConsumptionItem {
       amount: map['amount']?.toDouble() ?? 0.0,
       total: map['total']?.toDouble() ?? 0.0,
       date: map['date'],
+      userId: map['userId'],
     );
   }
 
@@ -46,7 +50,7 @@ class ConsumptionItem {
 
   @override
   String toString() {
-    return 'ConsumptionItem(id: $id, fuel: $fuel, amount: $amount, total: $total, date: $date)';
+    return 'ConsumptionItem(id: $id, fuel: $fuel, amount: $amount, total: $total, date: $date, userId: $userId)';
   }
 
   @override

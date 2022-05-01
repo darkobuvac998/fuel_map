@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
+import '../models/http_exception.dart';
 import '../models/shared_data.dart';
 
 class GasStation with ChangeNotifier {
@@ -21,18 +22,20 @@ class GasStation with ChangeNotifier {
       this.backgroundColor = Colors.amberAccent,
       this.isFavorite = false});
 
-  Future<void> updateFavoriteStatus() async {
-    var url = Uri.parse(Urls.gasStations);
+  Future<void> updateFavoriteStatus(String? token, String? userId) async {
+    var url = Uri.parse(
+        '${Urls.userFavorites}/$userId/$id.json?auth=$token');
 
     bool? oldStatus = isFavorite;
     isFavorite = !isFavorite;
 
-    var data = toMap();
-    final response = await http.put(url, body: json.encode(data));
+    final response = await http.put(url, body: json.encode(isFavorite));
+
+    print(response.body);
 
     if (response.statusCode >= 400) {
       isFavorite = !isFavorite;
-      throw Exception('Could not update the favorite status');
+      throw HttpException('Could not update the favorite status');
     }
 
     oldStatus = null;

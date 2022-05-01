@@ -11,4 +11,13 @@ class Urls {
       'https://fuel-map-51d07-default-rtdb.firebaseio.com/gas-station-locations.json';
   static const consumptions =
       'https://fuel-map-51d07-default-rtdb.firebaseio.com/consumptions.json';
+  static const userFavorites =
+      'https://fuel-map-51d07-default-rtdb.firebaseio.com/userFavorites';
+
 }
+
+//test@test.com
+//Test.12345  
+
+//test@test123.com
+//Test.123

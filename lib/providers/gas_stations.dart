@@ -12,15 +12,31 @@ class GasStations with ChangeNotifier {
     return [..._items];
   }
 
+  String? authToken;
+  String? userId;
+
+  GasStations(this._items, {this.authToken, this.userId});
+
   Future<void> fetchGasStations() async {
-    var url = Uri.parse(Urls.gasStations);
+    var url = Uri.parse('${Urls.gasStations}?auth=$authToken');
     try {
       final response = await http.get(url);
-      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>?;
+
+      if (extractedData == null) {
+        return;
+      }
       final List<GasStation> loadedItems = [];
+
+      var urlFavorites =
+          Uri.parse('${Urls.userFavorites}/$userId.json?auth=$authToken');
+
+      final favorites = await http.get(urlFavorites);
+      final favoriteData = json.decode(favorites.body);
 
       extractedData.forEach((id, data) {
         var temp = data as Map<String, dynamic>;
+        temp['isFavorite'] = favoriteData[id];
         temp.addAll({'id': id});
         loadedItems.add(GasStation.fromMap(temp));
       });

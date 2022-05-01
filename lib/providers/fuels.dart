@@ -14,9 +14,13 @@ class Fuels with ChangeNotifier {
     return [..._items];
   }
 
+  String? authToken;
+
+  Fuels(this._items, {this.authToken});
+
   Future<void> fetchFuelsForStation(String stationId) async {
-    var url =
-        Uri.parse('${Urls.fuels}?orderBy="gasStationId"&equalTo="$stationId"');
+    var url = Uri.parse(
+        '${Urls.fuels}?auth=$authToken&orderBy="gasStationId"&equalTo="$stationId"');
 
     try {
       _items = [];
