@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fuel_map/widgets/custom_appbar.dart';
 import '../providers/auth.dart';
 import '../screens/consumption_screen.dart';
 import 'package:provider/provider.dart';

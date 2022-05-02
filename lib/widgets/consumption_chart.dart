@@ -76,9 +76,11 @@ class _ConsumptionChartState extends State<ConsumptionChart> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
+                  const Text(
                     'Consumption for year: ',
-                    style: Theme.of(context).textTheme.headline6,
+                    style: TextStyle(
+                      fontSize: 15,
+                    ),
                   ),
                   const SizedBox(
                     width: 5,
@@ -116,21 +118,25 @@ class _ConsumptionChartState extends State<ConsumptionChart> {
                 isTransposed: true,
                 tooltipBehavior: _tooltipBehavior,
                 legend: Legend(
-                    isVisible: true,
-                    position: LegendPosition.bottom,
-                    title: LegendTitle()),
+                  opacity: 1,
+                  isVisible: true,
+                  position: LegendPosition.bottom,
+                  title: LegendTitle(),
+                ),
                 series: [
-                  BarSeries<ConsmumptionChartData, String>(
-                    name: 'Total money',
-                    color: Theme.of(context).primaryColor,
-                    dataSource: data,
-                    xValueMapper: (ConsmumptionChartData data, _) => data.month,
-                    yValueMapper: (ConsmumptionChartData data, _) =>
-                        data.expense,
-                    dataLabelSettings: const DataLabelSettings(
-                      isVisible: true,
+                  if (!_showLiters)
+                    BarSeries<ConsmumptionChartData, String>(
+                      name: 'Total money',
+                      color: Theme.of(context).primaryColor,
+                      dataSource: data,
+                      xValueMapper: (ConsmumptionChartData data, _) =>
+                          data.month,
+                      yValueMapper: (ConsmumptionChartData data, _) =>
+                          data.expense,
+                      dataLabelSettings: const DataLabelSettings(
+                        isVisible: true,
+                      ),
                     ),
-                  ),
                   if (_showLiters)
                     BarSeries<ConsmumptionChartData, String>(
                       name: 'Total liters',
@@ -155,10 +161,12 @@ class _ConsumptionChartState extends State<ConsumptionChart> {
                 ),
                 primaryYAxis: NumericAxis(
                   edgeLabelPlacement: EdgeLabelPlacement.shift,
-                  numberFormat: NumberFormat.simpleCurrency(
-                    decimalDigits: 0,
-                    locale: 'bs',
-                  ),
+                  numberFormat: !_showLiters
+                      ? NumberFormat.simpleCurrency(
+                          decimalDigits: 0,
+                          locale: 'bs',
+                        )
+                      : NumberFormat.compact(),
                 ),
               ),
             ),

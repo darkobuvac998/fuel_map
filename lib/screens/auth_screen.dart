@@ -105,168 +105,170 @@ class _AuthScreenState extends State<AuthScreen> {
     final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
       body: Center(
-        child: Container(
-          padding: EdgeInsets.symmetric(
-            horizontal: deviceSize.width * 0.2,
-            vertical: 8,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: deviceSize.height * 0.3,
-              ),
-              const Divider(),
-              _mode == AuthMode.signin
-                  ? Text(
-                      'Login',
-                      style: Theme.of(context).textTheme.headline5,
-                    )
-                  : Text(
-                      'Create Account',
-                      style: Theme.of(context).textTheme.headline5,
-                    ),
-              SizedBox(
-                height: deviceSize.height * 0.015,
-              ),
-              if (_mode == AuthMode.signin)
-                Text(
-                  'Please sign in to continue',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey.shade600,
-                  ),
-                )
-              else
-                Text(
-                  'Please sign up to continue',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.grey.shade600,
-                  ),
+        child: SingleChildScrollView(
+          child: Container(
+            padding: EdgeInsets.symmetric(
+              horizontal: deviceSize.width * 0.2,
+              vertical: 8,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: deviceSize.height * 0.3,
                 ),
-              SizedBox(
-                height: deviceSize.height * 0.05,
-              ),
-              Expanded(
-                child: Form(
-                  key: _formKey,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'E-Mail',
-                          ),
-                          keyboardType: TextInputType.emailAddress,
-                          validator: (value) {
-                            if (value != null &&
-                                (value.isEmpty || !value.contains('@'))) {
-                              return 'Invalid email!';
-                            }
-                            return null;
-                          },
-                          onSaved: (value) {
-                            _authData['email'] = value ?? '';
-                          },
-                        ),
-                        TextFormField(
-                          decoration:
-                              const InputDecoration(labelText: 'Password'),
-                          obscureText: true,
-                          controller: _passwordController,
-                          validator: (value) {
-                            if (value != null &&
-                                (value.isEmpty || value.length < 5)) {
-                              return 'Password is too short!';
-                            }
-                          },
-                          onSaved: (value) {
-                            _authData['password'] = value ?? '';
-                          },
-                        ),
-                        if (_mode == AuthMode.signup)
+                _mode == AuthMode.signin
+                    ? Text(
+                        'Login',
+                        style: Theme.of(context).textTheme.headline5,
+                      )
+                    : Text(
+                        'Create Account',
+                        style: Theme.of(context).textTheme.headline5,
+                      ),
+                SizedBox(
+                  height: deviceSize.height * 0.01,
+                ),
+                if (_mode == AuthMode.signin)
+                  Text(
+                    'Please sign in to continue',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey.shade600,
+                    ),
+                  )
+                else
+                  Text(
+                    'Please sign up to continue',
+                    style: TextStyle(
+                      fontSize: 18,
+                      color: Colors.grey.shade600,
+                    ),
+                  ),
+                SizedBox(
+                  height: deviceSize.height * 0.05,
+                ),
+                SizedBox(
+                  height: (deviceSize.height - MediaQuery.of(context).viewInsets.bottom) * 0.5,
+                  child: Form(
+                    key: _formKey,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: [
                           TextFormField(
-                            enabled: _mode == AuthMode.signup,
                             decoration: const InputDecoration(
-                                labelText: 'Confirm Password'),
+                              labelText: 'E-Mail',
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (value) {
+                              if (value != null &&
+                                  (value.isEmpty || !value.contains('@'))) {
+                                return 'Invalid email!';
+                              }
+                              return null;
+                            },
+                            onSaved: (value) {
+                              _authData['email'] = value ?? '';
+                            },
+                          ),
+                          TextFormField(
+                            decoration:
+                                const InputDecoration(labelText: 'Password'),
                             obscureText: true,
-                            validator: _mode == AuthMode.signup
-                                ? (value) {
-                                    if (value != _passwordController.text) {
-                                      return 'Passwords do not match!';
+                            controller: _passwordController,
+                            validator: (value) {
+                              if (value != null &&
+                                  (value.isEmpty || value.length < 5)) {
+                                return 'Password is too short!';
+                              }
+                            },
+                            onSaved: (value) {
+                              _authData['password'] = value ?? '';
+                            },
+                          ),
+                          if (_mode == AuthMode.signup)
+                            TextFormField(
+                              enabled: _mode == AuthMode.signup,
+                              decoration: const InputDecoration(
+                                  labelText: 'Confirm Password'),
+                              obscureText: true,
+                              validator: _mode == AuthMode.signup
+                                  ? (value) {
+                                      if (value != _passwordController.text) {
+                                        return 'Passwords do not match!';
+                                      }
                                     }
-                                  }
-                                : null,
+                                  : null,
+                            ),
+                          SizedBox(
+                            height: deviceSize.height * 0.01,
                           ),
-                        SizedBox(
-                          height: deviceSize.height * 0.01,
-                        ),
-                        if (_isLoading)
-                          const CircularProgressIndicator()
-                        else
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.end,
-                            children: [
-                              ElevatedButton(
-                                onPressed: _submit,
-                                child: Row(
-                                  children: [
-                                    _mode == AuthMode.signin
-                                        ? const Text(
-                                            'LOGIN',
-                                          )
-                                        : const Text(
-                                            'SING UP',
-                                          ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    const Icon(
-                                      Icons.arrow_forward_outlined,
-                                    )
-                                  ],
-                                ),
-                              )
-                            ],
-                          ),
-                      ],
+                          if (_isLoading)
+                            const CircularProgressIndicator()
+                          else
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                ElevatedButton(
+                                  onPressed: _submit,
+                                  child: Row(
+                                    children: [
+                                      _mode == AuthMode.signin
+                                          ? const Text(
+                                              'LOGIN',
+                                            )
+                                          : const Text(
+                                              'SING UP',
+                                            ),
+                                      const SizedBox(
+                                        width: 5,
+                                      ),
+                                      const Icon(
+                                        Icons.arrow_forward_outlined,
+                                      )
+                                    ],
+                                  ),
+                                )
+                              ],
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(
-                height: deviceSize.height * 0.05,
-              ),
-              _mode == AuthMode.signin
-                  ? Row(
-                      children: [
-                        const Text(
-                          'Dont\' have an account?',
-                        ),
-                        TextButton(
-                          onPressed: _onModeChange,
-                          child: const Text(
-                            'Sign up',
+                SizedBox(
+                  height: deviceSize.height * 0.01,
+                ),
+                _mode == AuthMode.signin
+                    ? Row(
+                        children: [
+                          const Text(
+                            'Dont\' have an account?',
                           ),
-                        )
-                      ],
-                    )
-                  : Row(
-                      children: [
-                        const Text(
-                          'Already have a account?',
-                        ),
-                        TextButton(
-                          onPressed: _onModeChange,
-                          child: const Text(
-                            'Sign in',
+                          TextButton(
+                            onPressed: _onModeChange,
+                            child: const Text(
+                              'Sign up',
+                            ),
+                          )
+                        ],
+                      )
+                    : Row(
+                        children: [
+                          const Text(
+                            'Already have a account?',
                           ),
-                        )
-                      ],
-                    )
-            ],
+                          TextButton(
+                            onPressed: _onModeChange,
+                            child: const Text(
+                              'Sign in',
+                            ),
+                          )
+                        ],
+                      )
+              ],
+            ),
           ),
         ),
       ),

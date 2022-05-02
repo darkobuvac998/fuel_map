@@ -90,40 +90,29 @@ class _MonthConsumptionState extends State<MonthConsumption> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          DateFormat.yMMM().format(
-                            selectedDate,
-                          ),
-                          style: Theme.of(context).textTheme.headline6,
+                GestureDetector(
+                  onTap: () => _showMonthPicker(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        DateFormat.yMMM().format(
+                          selectedDate,
                         ),
-                        const SizedBox(
-                          width: 5,
-                        ),
-                        IconButton(
-                          onPressed: () => _showMonthPicker(context),
-                          icon: Icon(
-                            Icons.date_range,
-                            color: Theme.of(context).colorScheme.secondary,
-                          ),
-                        )
-                      ],
-                    ),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        vertical: 4,
-                      ),
-                      child: Text(
-                        'Cost: ${data['totalAmount']} KM',
                         style: Theme.of(context).textTheme.headline6,
                       ),
-                    )
-                  ],
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 4,
+                        ),
+                        child: Text(
+                          'Cost: ${data['totalAmount']} KM',
+                          style: Theme.of(context).textTheme.headline6,
+                        ),
+                      )
+                    ],
+                  ),
                 ),
                 VerticalDivider(
                   thickness: 1,
