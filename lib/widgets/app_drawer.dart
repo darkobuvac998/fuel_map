@@ -11,10 +11,10 @@ class AppDrawer extends StatelessWidget {
   Widget build(BuildContext context) {
     return Drawer(
       elevation: 1,
-      backgroundColor: const Color(0xffeece6a),
+      // backgroundColor: const Color(0xffeece6a),
       child: Column(
         children: [
-          Container(
+          SizedBox(
             width: double.infinity,
             child: DrawerHeader(
               // padding: EdgeInsets.zero,
@@ -45,22 +45,22 @@ class AppDrawer extends StatelessWidget {
                   },
                 ),
                 const Divider(),
-                ListTile(
-                  leading: const Icon(Icons.car_repair, size: 30),
-                  title: Text(
-                    'Cars',
-                    style: Theme.of(context).textTheme.headline5,
-                  ),
-                  onTap: () {},
-                ),
-                const Divider(),
+                // // ListTile(
+                // //   leading: const Icon(Icons.car_repair, size: 30),
+                // //   title: Text(
+                // //     'Cars',
+                // //     style: Theme.of(context).textTheme.headline5,
+                // //   ),
+                // //   onTap: () {},
+                // // ),
+                // // const Divider(),
                 ListTile(
                   leading: const Icon(
                     Icons.money_outlined,
                     size: 30,
                   ),
                   title: Text(
-                    'Consumption',
+                    'Consumptions',
                     style: Theme.of(context).textTheme.headline5,
                   ),
                   onTap: () {

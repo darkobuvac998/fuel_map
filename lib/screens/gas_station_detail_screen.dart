@@ -37,7 +37,7 @@ class _GasStationDetailScreenState extends State<GasStationDetailScreen> {
         FuelListScreen(
           gasStationId: gasStationId,
         ),
-        const GasStationLocationsScreen(),
+        GasStationLocationsScreen(stationId: gasStationId),
       ];
     }
     _isInit = false;

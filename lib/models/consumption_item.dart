@@ -74,3 +74,4 @@ class ConsumptionItem {
         date.hashCode;
   }
 }
+

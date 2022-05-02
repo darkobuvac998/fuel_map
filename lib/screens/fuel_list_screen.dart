@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../widgets/new_consumption.dart';
 import '../providers/fuels.dart';
 import '../widgets/fuel_item.dart';
+import '../widgets/no_data_found.dart';
 
 class FuelListScreen extends StatelessWidget {
   String gasStationId;
@@ -99,18 +100,21 @@ class FuelListScreen extends StatelessWidget {
                   padding: const EdgeInsets.only(
                     top: 3.0,
                   ),
-                  child: ListView.builder(
-                    itemBuilder: ((ctx, index) => ChangeNotifierProvider.value(
-                          value: fuels.items[index],
-                          child: FuelItem(
-                            key: ValueKey(
-                              fuels.items[index].id,
-                            ),
-                            fuelId: fuels.items[index].id,
-                          ),
-                        )),
-                    itemCount: fuels.items.length,
-                  ),
+                  child: fuels.items.isNotEmpty
+                      ? ListView.builder(
+                          itemBuilder: ((ctx, index) =>
+                              ChangeNotifierProvider.value(
+                                value: fuels.items[index],
+                                child: FuelItem(
+                                  key: ValueKey(
+                                    fuels.items[index].id,
+                                  ),
+                                  fuelId: fuels.items[index].id,
+                                ),
+                              )),
+                          itemCount: fuels.items.length,
+                        )
+                      : const NoDataFound(),
                 ),
               ),
             );

@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:intl/intl.dart';
 
+import '../models/consumption_chart_data.dart';
 import '../models/consumption_item.dart';
 import '../models/http_exception.dart';
 import '../models/shared_data.dart' show Urls;
@@ -130,5 +131,30 @@ class Consumptions with ChangeNotifier {
       throw HttpException('Could not delete consumption.');
     }
     item = null;
+  }
+
+  List<ConsmumptionChartData> prepareChartData(int year) {
+    var months = List.generate(12, (index) => index + 1);
+
+    List<ConsmumptionChartData> result = [];
+    for (var month in months) {
+      double monthExpense = 0;
+      double liters = 0;
+      var monthConsumptions = _items
+          .where((element) =>
+              DateFormat.yMMMd().parse(element.date).month == month &&
+              DateFormat.yMMMd().parse(element.date).year == year)
+          .toList();
+      for (var element in monthConsumptions) {
+        monthExpense += element.amount;
+        liters += element.total;
+      }
+      result.add(ConsmumptionChartData(
+          month:
+              DateFormat.MMM().format(DateFormat('M').parse(month.toString())),
+          expense: monthExpense, liters:  liters));
+    }
+    print(result);
+    return result;
   }
 }

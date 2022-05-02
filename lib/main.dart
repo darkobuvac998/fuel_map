@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import './providers/gas_station_locations.dart';
 import './providers/fuels.dart';
 import './screens/splash_screen.dart';
 import './screens/gas_station_detail_screen.dart';
@@ -28,6 +29,13 @@ class MyApp extends StatelessWidget {
           create: (ctx) => Fuels([]),
           update: (ctx, auth, prevData) => Fuels(
             [],
+            authToken: auth.token,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, GasStationLocations>(
+          create: (ctx) => GasStationLocations([]),
+          update: (ctx, auth, prevData) => GasStationLocations(
+            prevData!.items,
             authToken: auth.token,
           ),
         ),
