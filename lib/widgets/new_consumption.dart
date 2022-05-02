@@ -38,7 +38,7 @@ class _NewConsumptionState extends State<NewConsumption> {
     final fuel =
         Provider.of<Fuels>(context, listen: false).getFuelById(widget.fuelId);
     final total = double.parse(
-        (double.parse(amountCtl.text) / fuel.price).toStringAsPrecision(2));
+        (double.parse(amountCtl.text) / fuel.price).toStringAsFixed(2));
 
     var item = ConsumptionItem(
       amount: double.parse(amountCtl.text),

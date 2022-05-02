@@ -53,15 +53,17 @@ class FuelListScreen extends StatelessWidget {
                 40,
               ),
             ),
-            backgroundColor: Theme.of(contx).primaryColor,
             actions: [
               TextButton(
                 onPressed: () {
                   Navigator.of(contx).pop();
                 },
                 child: Text(
-                  'OK',
-                  style: Theme.of(contx).textTheme.headline6,
+                  'Ok',
+                  style: TextStyle(
+                    fontSize: 18,
+                    color: Theme.of(ctx).primaryColor,
+                  ),
                 ),
               ),
             ],

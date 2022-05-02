@@ -8,10 +8,17 @@ import '../widgets/gas_station_item.dart';
 
 enum FilterOptions { favorites, all }
 
-class GasStationsScreen extends StatelessWidget {
+class GasStationsScreen extends StatefulWidget {
   static const routeName = '/gas-stations';
 
-  GasStationsScreen({Key? key}) : super(key: key);
+  const GasStationsScreen({Key? key}) : super(key: key);
+
+  @override
+  State<GasStationsScreen> createState() => _GasStationsScreenState();
+}
+
+class _GasStationsScreenState extends State<GasStationsScreen> {
+  FilterOptions _filterOptions = FilterOptions.all;
 
   Future<void> _refreshGasStations(BuildContext ctx) {
     return Future.delayed(Duration.zero, () async {
@@ -22,7 +29,6 @@ class GasStationsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final gasStations = Provider.of<GasStations>(context).items;
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Gas Stations',
@@ -50,7 +56,11 @@ class GasStationsScreen extends StatelessWidget {
                 value: FilterOptions.all,
               ),
             ],
-            onSelected: (FilterOptions selected) {},
+            onSelected: (FilterOptions selected) {
+              setState(() {
+                _filterOptions = selected;
+              });
+            },
           )
         ],
       ),
@@ -73,16 +83,22 @@ class GasStationsScreen extends StatelessWidget {
                   builder: (context, gasStations, _) => ListView.builder(
                     itemBuilder: (ctx, i) {
                       return ChangeNotifierProvider.value(
-                        value: gasStations.items[i],
+                        value: _filterOptions == FilterOptions.all
+                            ? gasStations.items[i]
+                            : gasStations.favorites[i],
                         child: GasStationItem(
                           key: ValueKey(
-                            gasStations.items[i].id,
+                            _filterOptions == FilterOptions.all
+                                ? gasStations.items[i]
+                                : gasStations.favorites[i],
                           ),
                         ),
                       );
                       ;
                     },
-                    itemCount: gasStations.items.length,
+                    itemCount: _filterOptions == FilterOptions.all
+                        ? gasStations.items.length
+                        : gasStations.favorites.length,
                   ),
                 ),
               ),

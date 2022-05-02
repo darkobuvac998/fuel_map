@@ -10,7 +10,7 @@ class Urls {
   static const gasStationLocations =
       'https://fuel-map-51d07-default-rtdb.firebaseio.com/gas-station-locations.json';
   static const consumptions =
-      'https://fuel-map-51d07-default-rtdb.firebaseio.com/consumptions.json';
+      'https://fuel-map-51d07-default-rtdb.firebaseio.com/consumptions';
   static const userFavorites =
       'https://fuel-map-51d07-default-rtdb.firebaseio.com/userFavorites';
 

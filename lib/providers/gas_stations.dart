@@ -12,6 +12,10 @@ class GasStations with ChangeNotifier {
     return [..._items];
   }
 
+  List<GasStation> get favorites {
+    return _items.where((element) => element.isFavorite == true).toList();
+  }
+
   String? authToken;
   String? userId;
 

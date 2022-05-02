@@ -43,8 +43,7 @@ class Consumptions with ChangeNotifier {
     for (var element in _filteredItems) {
       totalAmount = totalAmount + element.amount;
       totalLiters = totalLiters + element.total;
-      avgPrice = double.parse((totalAmount / totalLiters).toStringAsFixed(2))
-          .roundToDouble();
+      avgPrice = double.parse((totalAmount / totalLiters).toStringAsFixed(2));
     }
 
     var result = {
@@ -57,7 +56,7 @@ class Consumptions with ChangeNotifier {
 
   Future<void> fetchConsumption() async {
     var url = Uri.parse(
-        '${Urls.consumptions}?auth=$authToken&orderBy="userId"&equalTo="$userId"');
+        '${Urls.consumptions}.json?auth=$authToken&orderBy="userId"&equalTo="$userId"');
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>?;
@@ -83,7 +82,7 @@ class Consumptions with ChangeNotifier {
   }
 
   Future<void> addConsumptionItem(ConsumptionItem item) async {
-    var url = Uri.parse('${Urls.consumptions}?auth=$authToken');
+    var url = Uri.parse('${Urls.consumptions}.json?auth=$authToken');
     try {
       var data = item.toMap()..remove('id');
       final response = await http.post(url, body: json.encode(data));
@@ -112,8 +111,24 @@ class Consumptions with ChangeNotifier {
     return null;
   }
 
-  void deleteConsumption(String id) {
-    _items.removeWhere((element) => element.id == id);
-    notifyListeners();
+  Future<void> deleteConsumption(String id) async {
+    var url = Uri.parse('${Urls.consumptions}/$id.json?auth=$authToken');
+
+    final productIndex = _items.indexWhere((element) => element.id == id);
+    if (productIndex == -1) {
+      return;
+    }
+
+    ConsumptionItem? item = _items[productIndex];
+    _items.removeAt(productIndex);
+    filterItmes(month);
+    final response = await http.delete(url);
+    print(response.body);
+    if (response.statusCode >= 400) {
+      _items.insert(productIndex, item);
+      filterItmes(month);
+      throw HttpException('Could not delete consumption.');
+    }
+    item = null;
   }
 }
