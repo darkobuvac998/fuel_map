@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/http_exception.dart';
 import '../providers/auth.dart';
+import '../widgets/custom_card.dart';
 
 enum AuthMode { signup, signin }
 
@@ -109,14 +110,42 @@ class _AuthScreenState extends State<AuthScreen> {
           child: Container(
             padding: EdgeInsets.symmetric(
               horizontal: deviceSize.width * 0.2,
-              vertical: 8,
+              vertical: 2,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
-                  height: deviceSize.height * 0.3,
+                  height: deviceSize.height * 0.05,
+                ),
+                FittedBox(
+                  child: Image.asset(
+                    'assets/images/login_image.jpeg',
+                    fit: BoxFit.cover,
+                  ),
+                  fit: BoxFit.scaleDown,
+                ),
+                CustomCard(
+                  child: SizedBox(
+                    width: deviceSize.width * 0.5,
+                    height: deviceSize.height * 0.05,
+                    child: const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Center(
+                        child: Text(
+                          'Fuel map',
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: Colors.white70,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: deviceSize.height * 0.05,
                 ),
                 _mode == AuthMode.signin
                     ? Text(
@@ -147,10 +176,12 @@ class _AuthScreenState extends State<AuthScreen> {
                     ),
                   ),
                 SizedBox(
-                  height: deviceSize.height * 0.05,
+                  height: deviceSize.height * 0.01,
                 ),
                 SizedBox(
-                  height: (deviceSize.height - MediaQuery.of(context).viewInsets.bottom) * 0.5,
+                  height: (deviceSize.height -
+                          MediaQuery.of(context).viewInsets.bottom) *
+                      0.4,
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
