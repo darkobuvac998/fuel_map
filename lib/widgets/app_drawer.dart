@@ -13,16 +13,19 @@ class AppDrawer extends StatelessWidget {
       // backgroundColor: const Color(0xffeece6a),
       child: Column(
         children: [
-          SizedBox(
+          const SizedBox(
             width: double.infinity,
             child: DrawerHeader(
               // padding: EdgeInsets.zero,
               child: Text(
-                'Fuel Map',
-                style: Theme.of(context).textTheme.headline5,
-                textAlign: TextAlign.start,
+                '',
               ),
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: AssetImage(
+                      'assets/images/app_drawer_header_background.jpeg'),
+                  fit: BoxFit.cover,
+                ),
                 color: Color(0xfff7b429),
               ),
             ),
@@ -33,11 +36,11 @@ class AppDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(
                     Icons.local_gas_station,
-                    size: 30,
+                    size: 24,
                   ),
                   title: Text(
                     'Gas Stations',
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   onTap: () {
                     Navigator.of(context).pushReplacementNamed('/');
@@ -45,10 +48,10 @@ class AppDrawer extends StatelessWidget {
                 ),
                 const Divider(),
                 // // ListTile(
-                // //   leading: const Icon(Icons.car_repair, size: 30),
+                // //   leading: const Icon(Icons.car_repair, size: 24),
                 // //   title: Text(
                 // //     'Cars',
-                // //     style: Theme.of(context).textTheme.headline5,
+                // //     style: Theme.of(context).textTheme.headline4,
                 // //   ),
                 // //   onTap: () {},
                 // // ),
@@ -56,11 +59,11 @@ class AppDrawer extends StatelessWidget {
                 ListTile(
                   leading: const Icon(
                     Icons.money_outlined,
-                    size: 30,
+                    size: 24,
                   ),
                   title: Text(
                     'Consumptions',
-                    style: Theme.of(context).textTheme.headline5,
+                    style: Theme.of(context).textTheme.headline4,
                   ),
                   onTap: () {
                     Navigator.of(context)
@@ -73,11 +76,11 @@ class AppDrawer extends StatelessWidget {
           ListTile(
             leading: const Icon(
               Icons.exit_to_app,
-              size: 30,
+              size: 24,
             ),
             title: Text(
               'Logout',
-              style: Theme.of(context).textTheme.headline5,
+              style: Theme.of(context).textTheme.headline4,
             ),
             onTap: () {
               Navigator.of(context).pop();

@@ -18,7 +18,6 @@ class ConsumptionListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final mediaQuery = MediaQuery.of(context);
     return Scaffold(
       body: FutureBuilder(
           future: _refresItems(context),
@@ -36,7 +35,7 @@ class ConsumptionListScreen extends StatelessWidget {
             return Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                MonthConsumption(),
+                const MonthConsumption(),
                 Divider(
                   indent: 30,
                   endIndent: 30,

@@ -12,6 +12,7 @@ class Consumptions with ChangeNotifier {
   List<ConsumptionItem> _items = [];
   List<ConsumptionItem> _filteredItems = [];
   int month = DateTime.now().month;
+  int year = DateTime.now().year;
 
   String? authToken;
   String? userId;
@@ -26,17 +27,18 @@ class Consumptions with ChangeNotifier {
     return [..._filteredItems];
   }
 
-  void filterItmes(int month) {
+  void filterItmes(int month, int year) {
     month = month;
+    year = year;
     _filteredItems = _items
-        .where(
-            (element) => DateFormat.yMMMd().parse(element.date).month == month)
+        .where((element) =>
+            DateFormat.yMMMd().parse(element.date).month == month &&
+            DateFormat.yMMMd().parse(element.date).year == year)
         .toList();
-    print(month);
     notifyListeners();
   }
 
-  Future<Map<String, dynamic>> getCostsPerMonth() async {
+  Map<String, dynamic> getCostsPerMonth() {
     double totalAmount = 0;
     double totalLiters = 0;
     double avgPrice = 0;
@@ -75,8 +77,8 @@ class Consumptions with ChangeNotifier {
         loadedItems.add(ConsumptionItem.fromMap(temp));
       });
       _items = loadedItems;
-      filterItmes(month);
-      notifyListeners();
+      filterItmes(month, year);
+      // notifyListeners();
     } catch (error) {
       rethrow;
     }
@@ -99,9 +101,6 @@ class Consumptions with ChangeNotifier {
     } catch (error) {
       rethrow;
     }
-
-    _items.add(item);
-    notifyListeners();
   }
 
   ConsumptionItem? getConsumptionById(String id) {
@@ -122,12 +121,11 @@ class Consumptions with ChangeNotifier {
 
     ConsumptionItem? item = _items[productIndex];
     _items.removeAt(productIndex);
-    filterItmes(month);
+    filterItmes(month, year);
     final response = await http.delete(url);
-    print(response.body);
     if (response.statusCode >= 400) {
       _items.insert(productIndex, item);
-      filterItmes(month);
+      filterItmes(month, year);
       throw HttpException('Could not delete consumption.');
     }
     item = null;
@@ -152,9 +150,9 @@ class Consumptions with ChangeNotifier {
       result.add(ConsmumptionChartData(
           month:
               DateFormat.MMM().format(DateFormat('M').parse(month.toString())),
-          expense: monthExpense, liters:  liters));
+          expense: monthExpense,
+          liters: liters));
     }
-    print(result);
     return result;
   }
 }

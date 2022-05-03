@@ -7,7 +7,7 @@ import 'package:provider/provider.dart';
 import '../widgets/custom_card.dart';
 
 class MonthConsumption extends StatefulWidget {
-  MonthConsumption({Key? key}) : super(key: key);
+  const MonthConsumption({Key? key}) : super(key: key);
 
   @override
   State<MonthConsumption> createState() => _MonthConsumptionState();
@@ -22,9 +22,7 @@ class _MonthConsumptionState extends State<MonthConsumption> {
   @override
   void didChangeDependencies() {
     if (_init) {
-      Future.delayed(Duration.zero, () async {
-        return onDateChange(context);
-      });
+      onDateChange(context);
       _init = false;
     }
     super.didChangeDependencies();
@@ -42,22 +40,118 @@ class _MonthConsumptionState extends State<MonthConsumption> {
       setState(() {
         selectedDate = date;
         initialDate = date;
-        onDateChange(ctx);
       });
     } else {
       setState(() {
         selectedDate = DateTime.now();
       });
     }
+    onDateChange(ctx);
   }
 
-  void onDateChange(BuildContext ctx) async {
+  void onDateChange(BuildContext ctx) {
     Provider.of<Consumptions>(ctx, listen: false)
-        .filterItmes(selectedDate.month);
-    data =
-        await Provider.of<Consumptions>(ctx, listen: false).getCostsPerMonth();
+        .filterItmes(selectedDate.month, selectedDate.year);
+    data = Provider.of<Consumptions>(ctx, listen: false).getCostsPerMonth();
+  }
 
-    setState(() {});
+  Widget monthConsumptionoVersion2(BuildContext ctx) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        ListTile(
+          leading: CircleAvatar(
+            backgroundColor: Theme.of(context).colorScheme.secondary,
+            child: const Padding(
+              padding: EdgeInsets.all(
+                8.0,
+              ),
+              child: Icon(
+                Icons.calendar_month,
+              ),
+            ),
+          ),
+          title: Text(
+            DateFormat.yMMM().format(
+              selectedDate,
+            ),
+            style: Theme.of(context).textTheme.headline6,
+          ),
+          subtitle: const Text(
+            'Tap to chose moonth',
+            style: TextStyle(
+              fontSize: 15,
+              color: Colors.black87,
+            ),
+          ),
+          onTap: () => _showMonthPicker(ctx),
+        ),
+        const Divider(
+          height: 10,
+          color: Colors.white70,
+          thickness: 1,
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 6.0,
+            vertical: 10,
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${data['totalAmount']}',
+                  ),
+                  const Text(
+                    'Total money',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${data['totalLiters']}',
+                  ),
+                  const Text(
+                    'Total liters',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  )
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Text(
+                    '${data['avgPrice']}',
+                  ),
+                  const Text(
+                    'Average Price',
+                    style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black87,
+                    ),
+                  )
+                ],
+              ),
+            ],
+          ),
+        )
+      ],
+    );
   }
 
   @override
@@ -77,65 +171,11 @@ class _MonthConsumptionState extends State<MonthConsumption> {
             borderRadius: BorderRadius.circular(
               40,
             ),
-            gradient: const LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Color(0xfff8be32),
-                Color(0xffea5e29),
-              ],
-            ),
+            color: Theme.of(context).primaryColor,
           ),
           child: IntrinsicHeight(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                GestureDetector(
-                  onTap: () => _showMonthPicker(context),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        DateFormat.yMMM().format(
-                          selectedDate,
-                        ),
-                        style: Theme.of(context).textTheme.headline6,
-                      ),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          vertical: 4,
-                        ),
-                        child: Text(
-                          'Cost: ${data['totalAmount']} KM',
-                          style: Theme.of(context).textTheme.headline6,
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                VerticalDivider(
-                  thickness: 1,
-                  width: 20,
-                  indent: 10,
-                  endIndent: 10,
-                  color: Theme.of(context).colorScheme.secondary,
-                ),
-                FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text('Liters:'),
-                      Text('${data['totalLiters']}'),
-                      const Text('Average price'),
-                      Text('${data['avgPrice']} KM'),
-                    ],
-                  ),
-                )
-              ],
+            child: monthConsumptionoVersion2(
+              context,
             ),
           ),
         ),

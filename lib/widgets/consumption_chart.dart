@@ -124,19 +124,17 @@ class _ConsumptionChartState extends State<ConsumptionChart> {
                   title: LegendTitle(),
                 ),
                 series: [
-                  if (!_showLiters)
-                    BarSeries<ConsmumptionChartData, String>(
-                      name: 'Total money',
-                      color: Theme.of(context).primaryColor,
-                      dataSource: data,
-                      xValueMapper: (ConsmumptionChartData data, _) =>
-                          data.month,
-                      yValueMapper: (ConsmumptionChartData data, _) =>
-                          data.expense,
-                      dataLabelSettings: const DataLabelSettings(
-                        isVisible: true,
-                      ),
+                  BarSeries<ConsmumptionChartData, String>(
+                    name: 'Total money',
+                    color: Theme.of(context).primaryColor,
+                    dataSource: data,
+                    xValueMapper: (ConsmumptionChartData data, _) => data.month,
+                    yValueMapper: (ConsmumptionChartData data, _) =>
+                        data.expense,
+                    dataLabelSettings: const DataLabelSettings(
+                      isVisible: true,
                     ),
+                  ),
                   if (_showLiters)
                     BarSeries<ConsmumptionChartData, String>(
                       name: 'Total liters',

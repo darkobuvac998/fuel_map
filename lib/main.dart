@@ -87,6 +87,12 @@ class MyApp extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                     color: Color(0xff5a5a5c),
                   ),
+                  headline4: const TextStyle(
+                    fontSize: 15,
+                    fontFamily: 'Lato',
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFF2E2E2E),
+                  ),
                 ),
             colorScheme: ColorScheme.fromSwatch().copyWith(
               secondary: const Color(0xffe6341c),

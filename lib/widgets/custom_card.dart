@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CustomCard extends StatelessWidget {
-  Widget child;
-  CustomCard({required this.child, Key? key}) : super(key: key);
+  final Widget child;
+  const CustomCard({required this.child, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

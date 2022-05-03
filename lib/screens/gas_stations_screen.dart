@@ -33,12 +33,6 @@ class _GasStationsScreenState extends State<GasStationsScreen> {
       appBar: CustomAppBar(
         title: 'Gas Stations',
         actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.add,
-            ),
-          ),
           PopupMenuButton(
             itemBuilder: (_) => [
               PopupMenuItem(
