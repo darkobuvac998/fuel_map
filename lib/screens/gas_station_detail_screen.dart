@@ -106,7 +106,7 @@ class _GasStationDetailScreenState extends State<GasStationDetailScreen> {
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.water_drop),
-              label: 'Gasoline',
+              label: 'Pricess',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.map),

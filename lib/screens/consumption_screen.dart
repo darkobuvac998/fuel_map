@@ -59,11 +59,11 @@ class _ConsumptionScreenState extends State<ConsumptionScreen> {
               icon: Icon(
                 Icons.pie_chart_rounded,
               ),
-              label: 'Costs',
+              label: 'Fuel consumption',
             ),
             BottomNavigationBarItem(
               icon: Icon(Icons.bar_chart),
-              label: 'Overview',
+              label: 'Year overview',
             )
           ],
           onTap: _selectScreen,

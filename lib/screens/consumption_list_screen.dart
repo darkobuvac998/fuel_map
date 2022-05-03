@@ -18,6 +18,7 @@ class ConsumptionListScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context);
     return Scaffold(
       body: FutureBuilder(
           future: _refresItems(context),
@@ -32,35 +33,44 @@ class ConsumptionListScreen extends StatelessWidget {
                 child: Icon(Icons.broken_image),
               );
             }
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const MonthConsumption(),
-                Divider(
-                  indent: 30,
-                  endIndent: 30,
-                  color: Theme.of(context).primaryColor,
-                  height: 20,
-                  thickness: 2,
-                ),
-                Expanded(
-                  child: RefreshIndicator(
-                    child: Consumer<Consumptions>(
-                      builder: (context, consumptions, child) => consumptions
-                              .filteredItems.isNotEmpty
-                          ? ListView.builder(
-                              itemBuilder: (context, index) => ConsumptionItem(
-                                consumptionId:
-                                    consumptions.filteredItems[index].id,
-                              ),
-                              itemCount: consumptions.filteredItems.length,
-                            )
-                          : const NoDataFound(),
+            return Padding(
+              padding: mediaQuery.orientation == Orientation.landscape
+                  ? EdgeInsets.symmetric(
+                      horizontal: mediaQuery.size.width * 0.1)
+                  : const EdgeInsets.all(
+                      0,
                     ),
-                    onRefresh: () => _refresItems(context),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const MonthConsumption(),
+                  Divider(
+                    indent: 30,
+                    endIndent: 30,
+                    color: Theme.of(context).primaryColor,
+                    height: 20,
+                    thickness: 2,
                   ),
-                ),
-              ],
+                  Expanded(
+                    child: RefreshIndicator(
+                      child: Consumer<Consumptions>(
+                        builder: (context, consumptions, child) => consumptions
+                                .filteredItems.isNotEmpty
+                            ? ListView.builder(
+                                itemBuilder: (context, index) =>
+                                    ConsumptionItem(
+                                  consumptionId:
+                                      consumptions.filteredItems[index].id,
+                                ),
+                                itemCount: consumptions.filteredItems.length,
+                              )
+                            : const NoDataFound(),
+                      ),
+                      onRefresh: () => _refresItems(context),
+                    ),
+                  ),
+                ],
+              ),
             );
           }),
     );
