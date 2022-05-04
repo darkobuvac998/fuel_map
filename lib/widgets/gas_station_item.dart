@@ -39,9 +39,16 @@ class GasStationItem extends StatelessWidget {
             child: ListTile(
               leading: CircleAvatar(
                 backgroundColor: Colors.transparent,
-                radius: 40,
-                backgroundImage: NetworkImage(
-                  gasStation.logoUrl,
+                radius: 45,
+                child: Hero(
+                  tag: gasStation.id,
+                  child: CircleAvatar(
+                    radius: 45,
+                    backgroundImage: NetworkImage(
+                      gasStation.logoUrl,
+                      scale: 1,
+                    ),
+                  ),
                 ),
               ),
               title: FittedBox(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:ui';
 
 import '../models/http_exception.dart';
 import '../providers/auth.dart';
@@ -14,12 +15,63 @@ class AuthScreen extends StatefulWidget {
   State<AuthScreen> createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> {
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
   AuthMode _mode = AuthMode.signin;
   final GlobalKey<FormState> _formKey = GlobalKey();
   Map<String, String> _authData = {'email': '', 'password': ''};
   final _passwordController = TextEditingController();
   var _isLoading = false;
+  var screenWidth =
+      (window.physicalSize.shortestSide / window.devicePixelRatio);
+  var screenHeight =
+      (window.physicalSize.longestSide / window.devicePixelRatio);
+
+  late AnimationController _controller;
+  late Animation<Size> _heightAnimation;
+  late Animation<double> _opacityAnimation;
+  late Animation<Offset> _slideAnimation;
+
+  @override
+  void initState() {
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(
+        milliseconds: 300,
+      ),
+    );
+    _heightAnimation = Tween<Size>(
+      begin: Size(
+        double.infinity,
+        screenHeight * 0.3,
+      ),
+      end: Size(
+        double.infinity,
+        screenHeight * 0.4,
+      ),
+    ).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.fastOutSlowIn),
+    );
+
+    _opacityAnimation = Tween(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeIn,
+      ),
+    );
+
+    _slideAnimation = Tween(
+            begin: const Offset(
+              0.0,
+              -0.8,
+            ),
+            end: const Offset(0.0, 0.0))
+        .animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
+
+    super.initState();
+  }
 
   Future<void> _submit() async {
     if (!_formKey.currentState!.validate()) {
@@ -95,8 +147,10 @@ class _AuthScreenState extends State<AuthScreen> {
     setState(() {
       if (_mode == AuthMode.signin) {
         _mode = AuthMode.signup;
+        _controller.forward();
       } else {
         _mode = AuthMode.signin;
+        _controller.reverse();
       }
     });
   }
@@ -113,7 +167,7 @@ class _AuthScreenState extends State<AuthScreen> {
               vertical: 2,
             ),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 SizedBox(
@@ -178,10 +232,17 @@ class _AuthScreenState extends State<AuthScreen> {
                 SizedBox(
                   height: deviceSize.height * 0.01,
                 ),
-                SizedBox(
-                  height: (deviceSize.height -
-                          MediaQuery.of(context).viewInsets.bottom) *
-                      0.4,
+                AnimatedBuilder(
+                  animation: _heightAnimation,
+                  builder: (ctx, child) => Container(
+                      // height: (deviceSize.height -
+                      //         MediaQuery.of(context).viewInsets.bottom) *
+                      //     0.25,
+                      height: _heightAnimation.value.height,
+                      padding: const EdgeInsets.all(
+                        2,
+                      ),
+                      child: child),
                   child: Form(
                     key: _formKey,
                     child: SingleChildScrollView(
@@ -219,24 +280,33 @@ class _AuthScreenState extends State<AuthScreen> {
                             },
                           ),
                           if (_mode == AuthMode.signup)
-                            TextFormField(
-                              enabled: _mode == AuthMode.signup,
-                              decoration: const InputDecoration(
-                                  labelText: 'Confirm Password'),
-                              obscureText: true,
-                              validator: _mode == AuthMode.signup
-                                  ? (value) {
-                                      if (value != _passwordController.text) {
-                                        return 'Passwords do not match!';
-                                      }
-                                    }
-                                  : null,
+                            FadeTransition(
+                              opacity: _opacityAnimation,
+                              child: SlideTransition(
+                                position: _slideAnimation,
+                                child: TextFormField(
+                                  enabled: _mode == AuthMode.signup,
+                                  decoration: const InputDecoration(
+                                      labelText: 'Confirm Password'),
+                                  obscureText: true,
+                                  validator: _mode == AuthMode.signup
+                                      ? (value) {
+                                          if (value !=
+                                              _passwordController.text) {
+                                            return 'Passwords do not match!';
+                                          }
+                                        }
+                                      : null,
+                                ),
+                              ),
                             ),
                           SizedBox(
                             height: deviceSize.height * 0.01,
                           ),
                           if (_isLoading)
-                            const CircularProgressIndicator()
+                            const Center(
+                              child: CircularProgressIndicator(),
+                            )
                           else
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
@@ -306,3 +376,5 @@ class _AuthScreenState extends State<AuthScreen> {
     );
   }
 }
+
+// AnimatedController

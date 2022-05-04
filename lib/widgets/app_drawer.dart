@@ -23,7 +23,8 @@ class AppDrawer extends StatelessWidget {
               decoration: BoxDecoration(
                 image: DecorationImage(
                   image: AssetImage(
-                      'assets/images/app_drawer_header_background.jpeg'),
+                    'assets/images/app_drawer_header_background.jpeg',
+                  ),
                   fit: BoxFit.cover,
                 ),
                 color: Color(0xfff7b429),

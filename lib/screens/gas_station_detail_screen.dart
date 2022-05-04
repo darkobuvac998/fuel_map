@@ -4,6 +4,7 @@ import 'package:fuel_map/providers/fuels.dart';
 import 'package:fuel_map/widgets/custom_appbar.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/gas_station.dart';
 import '../providers/gas_stations.dart';
 import '../widgets/sort_prices_popupmenubutton.dart';
 import 'fuel_list_screen.dart';
@@ -64,28 +65,69 @@ class _GasStationDetailScreenState extends State<GasStationDetailScreen> {
     }
   }
 
+  Widget buildBodyWithSilvers(
+      BuildContext ctx, Size deviceSize, GasStation gasStation) {
+    return CustomScrollView(
+      physics: const BouncingScrollPhysics(),
+      slivers: [
+        SliverAppBar(
+          elevation: 0,
+          iconTheme: const IconThemeData(
+            color: Colors.black54,
+          ),
+          actionsIconTheme: const IconThemeData(
+            color: Colors.black54,
+          ),
+          expandedHeight: deviceSize.height * 0.2,
+          pinned: true,
+          // title: Text(
+          //   gasStation.title,
+          //   style: Theme.of(context).textTheme.headline6,
+          // ),
+          flexibleSpace: FlexibleSpaceBar(
+            stretchModes: [StretchMode.zoomBackground],
+            // title: Text(gasStation.title),
+            background: SizedBox(
+              child: Hero(
+                tag: gasStation.id,
+                child: Image.network(
+                  gasStation.logoUrl,
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ),
+          actions: [
+            if (_selectedScreen == 0)
+              SortByPricesPopupMenuButton(
+                sortby: _sortBy,
+                changeSorting: () => _changeSorting(),
+              ),
+          ],
+        ),
+        SliverList(
+          delegate: SliverChildListDelegate(
+            [
+              SizedBox(
+                height: deviceSize.height * 0.695,
+                width: deviceSize.height,
+                child: _screens[_selectedScreen],
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final gasStationId = ModalRoute.of(context)?.settings.arguments as String;
     final gasStation =
         Provider.of<GasStations>(context, listen: false).findById(gasStationId);
+    final deviceSize = MediaQuery.of(context).size;
     return Scaffold(
-      appBar: CustomAppBar(
-        title: gasStation.title,
-        actions: [
-          if (_selectedScreen == 0)
-            SortByPricesPopupMenuButton(
-              sortby: _sortBy,
-              changeSorting: () => _changeSorting(),
-            ),
-        ],
-      ),
-      body: Padding(
-        padding: const EdgeInsets.only(
-          top: 8.0,
-        ),
-        child: _screens[_selectedScreen],
-      ),
+      body: buildBodyWithSilvers(context, deviceSize, gasStation),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

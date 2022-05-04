@@ -47,25 +47,6 @@ class Fuels with ChangeNotifier {
     return _items.firstWhere((element) => element.id == fuelId);
   }
 
-  Future<void> addFuel(String gsId) async {
-    var url = Uri.parse(Urls.fuels);
-
-    try {
-      var data = _items.map((e) {
-        var data = e.toMap()..remove('id');
-        data['gasStationId'] = gsId;
-        return data;
-      }).toList();
-
-      data.forEach((element) async {
-        var response = await http.post(url, body: json.encode(element));
-        print(json.decode(response.body));
-      });
-    } catch (error) {
-      rethrow;
-    }
-  }
-
   void sortItems(SortByPrices sortBy) {
     if (sortBy == SortByPrices.ascending) {
       _items.sort(
