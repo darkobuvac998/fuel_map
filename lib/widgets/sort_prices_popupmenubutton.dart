@@ -21,7 +21,7 @@ class SortByPricesPopupMenuButton extends StatelessWidget {
               children: [
                 Text(
                   'Ascending',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
                 const SizedBox(
                   width: 5,
@@ -40,7 +40,7 @@ class SortByPricesPopupMenuButton extends StatelessWidget {
               children: [
                 Text(
                   'Descending',
-                  style: Theme.of(context).textTheme.headline6,
+                  style: Theme.of(context).textTheme.headline4,
                 ),
                 const SizedBox(
                   width: 5,

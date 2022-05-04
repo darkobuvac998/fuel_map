@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:fuel_map/helpers/custom_route.dart';
 import 'package:fuel_map/providers/gas_station.dart';
 import 'package:provider/provider.dart';
 
@@ -22,9 +23,15 @@ class GasStationItem extends StatelessWidget {
       ),
       child: GestureDetector(
         onTap: () => {
-          Navigator.of(context).pushNamed(
-            GasStationDetailScreen.routeName,
-            arguments: gasStation.id,
+          // Navigator.of(context).pushNamed(
+          //   GasStationDetailScreen.routeName,
+          //   arguments: gasStation.id,
+          // )
+          Navigator.of(context).push(
+            SlideLeftRoute(
+              page: const GasStationDetailScreen(),
+              arguments: gasStation.id,
+            ),
           )
         },
         child: CustomCard(
@@ -40,16 +47,16 @@ class GasStationItem extends StatelessWidget {
               leading: CircleAvatar(
                 backgroundColor: Colors.transparent,
                 radius: 45,
-                child: Hero(
-                  tag: gasStation.id,
-                  child: CircleAvatar(
-                    radius: 45,
-                    backgroundImage: NetworkImage(
-                      gasStation.logoUrl,
-                      scale: 1,
-                    ),
+                // child: Hero(
+                //   tag: gasStation.id,
+                child: CircleAvatar(
+                  radius: 45,
+                  backgroundImage: NetworkImage(
+                    gasStation.logoUrl,
+                    scale: 1,
                   ),
                 ),
+                // ),
               ),
               title: FittedBox(
                 fit: BoxFit.scaleDown,

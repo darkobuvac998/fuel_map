@@ -88,13 +88,13 @@ class _GasStationDetailScreenState extends State<GasStationDetailScreen> {
             stretchModes: [StretchMode.zoomBackground],
             // title: Text(gasStation.title),
             background: SizedBox(
-              child: Hero(
-                tag: gasStation.id,
-                child: Image.network(
-                  gasStation.logoUrl,
-                  fit: BoxFit.cover,
-                ),
+              // child: Hero(
+              //   tag: gasStation.id,
+              child: Image.network(
+                gasStation.logoUrl,
+                fit: BoxFit.cover,
               ),
+              // ),
             ),
           ),
           actions: [
