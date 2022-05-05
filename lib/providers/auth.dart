@@ -100,7 +100,6 @@ class Auth with ChangeNotifier {
     notifyListeners();
 
     final prefs = await SharedPreferences.getInstance();
-    // prefs.remove('key');
     prefs.clear();
   }
 

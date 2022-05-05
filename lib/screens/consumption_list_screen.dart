@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../widgets/consumption_item.dart';
 import '../providers/consumptions.dart';
 import '../widgets/no_data_found.dart';
+import '../models/consumption_item.dart' as citem;
 
 class ConsumptionListScreen extends StatelessWidget {
   const ConsumptionListScreen({Key? key}) : super(key: key);
@@ -14,6 +15,32 @@ class ConsumptionListScreen extends StatelessWidget {
       return await Provider.of<Consumptions>(ctx, listen: false)
           .fetchConsumption();
     });
+  }
+
+  Widget animatedList(BuildContext ctx, List<citem.ConsumptionItem> items) {
+    return AnimatedList(
+      initialItemCount: items.length,
+      itemBuilder: (contx, index, animation) => SlideTransition(
+        position: animation.drive(
+          Tween<Offset>(
+            begin: const Offset(-1, 0),
+            end: const Offset(0, 0),
+          ),
+        ),
+        child: ConsumptionItem(
+          consumptionId: items[index].id,
+        ),
+      ),
+    );
+  }
+
+  Widget _itemList(BuildContext ctx, List<citem.ConsumptionItem> items) {
+    return ListView.builder(
+      itemBuilder: (context, index) => ConsumptionItem(
+        consumptionId: items[index].id,
+      ),
+      itemCount: items.length,
+    );
   }
 
   @override
@@ -56,14 +83,7 @@ class ConsumptionListScreen extends StatelessWidget {
                       child: Consumer<Consumptions>(
                         builder: (context, consumptions, child) => consumptions
                                 .filteredItems.isNotEmpty
-                            ? ListView.builder(
-                                itemBuilder: (context, index) =>
-                                    ConsumptionItem(
-                                  consumptionId:
-                                      consumptions.filteredItems[index].id,
-                                ),
-                                itemCount: consumptions.filteredItems.length,
-                              )
+                            ? _itemList(context, consumptions.filteredItems)
                             : const NoDataFound(),
                       ),
                       onRefresh: () => _refresItems(context),

@@ -16,7 +16,7 @@ class MonthConsumption extends StatefulWidget {
 class _MonthConsumptionState extends State<MonthConsumption> {
   DateTime initialDate = DateTime.now();
   DateTime selectedDate = DateTime.now();
-  Map<String, dynamic> data = {};
+  // Map<String, dynamic> data = {};
   bool _init = true;
 
   @override
@@ -52,10 +52,11 @@ class _MonthConsumptionState extends State<MonthConsumption> {
   void onDateChange(BuildContext ctx) {
     Provider.of<Consumptions>(ctx, listen: false)
         .filterItmes(selectedDate.month, selectedDate.year);
-    data = Provider.of<Consumptions>(ctx, listen: false).getCostsPerMonth();
+    // data = Provider.of<Consumptions>(ctx, listen: false).monthCosts;
   }
 
   Widget monthConsumptionoVersion2(BuildContext ctx) {
+    final data = Provider.of<Consumptions>(ctx).monthCosts;
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: [

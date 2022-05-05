@@ -13,6 +13,7 @@ class Consumptions with ChangeNotifier {
   List<ConsumptionItem> _filteredItems = [];
   int month = DateTime.now().month;
   int year = DateTime.now().year;
+  Map<String, dynamic> _monthCosts = {};
 
   String? authToken;
   String? userId;
@@ -27,6 +28,10 @@ class Consumptions with ChangeNotifier {
     return [..._filteredItems];
   }
 
+  Map<String, dynamic> get monthCosts {
+    return {..._monthCosts};
+  }
+
   void filterItmes(int month, int year) {
     month = month;
     year = year;
@@ -38,7 +43,7 @@ class Consumptions with ChangeNotifier {
     notifyListeners();
   }
 
-  Map<String, dynamic> getCostsPerMonth() {
+  void getCostsPerMonth() {
     double totalAmount = 0;
     double totalLiters = 0;
     double avgPrice = 0;
@@ -54,7 +59,8 @@ class Consumptions with ChangeNotifier {
       'totalLiters': totalLiters.toStringAsFixed(2),
       'avgPrice': avgPrice
     };
-    return result;
+    _monthCosts = result;
+    notifyListeners();
   }
 
   Future<void> fetchConsumption() async {
@@ -78,7 +84,7 @@ class Consumptions with ChangeNotifier {
       });
       _items = loadedItems;
       filterItmes(month, year);
-      // notifyListeners();
+      getCostsPerMonth();
     } catch (error) {
       rethrow;
     }
@@ -121,13 +127,15 @@ class Consumptions with ChangeNotifier {
 
     ConsumptionItem? item = _items[productIndex];
     _items.removeAt(productIndex);
-    filterItmes(month, year);
     final response = await http.delete(url);
     if (response.statusCode >= 400) {
       _items.insert(productIndex, item);
       filterItmes(month, year);
+      getCostsPerMonth();
       throw HttpException('Could not delete consumption.');
     }
+    filterItmes(month, year);
+    getCostsPerMonth();
     item = null;
   }
 
