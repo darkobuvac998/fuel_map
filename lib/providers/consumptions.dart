@@ -40,6 +40,7 @@ class Consumptions with ChangeNotifier {
             DateFormat.yMMMd().parse(element.date).month == month &&
             DateFormat.yMMMd().parse(element.date).year == year)
         .toList();
+    getCostsPerMonth();
     notifyListeners();
   }
 
@@ -84,7 +85,6 @@ class Consumptions with ChangeNotifier {
       });
       _items = loadedItems;
       filterItmes(month, year);
-      getCostsPerMonth();
     } catch (error) {
       rethrow;
     }
@@ -135,7 +135,6 @@ class Consumptions with ChangeNotifier {
       throw HttpException('Could not delete consumption.');
     }
     filterItmes(month, year);
-    getCostsPerMonth();
     item = null;
   }
 

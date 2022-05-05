@@ -17,14 +17,11 @@ class ConsumptionItem extends StatelessWidget {
         Provider.of<Consumptions>(context).getConsumptionById(consumptionId);
     final gasStation = Provider.of<GasStations>(context)
         .findById(consumption?.fuel.gasStationId as String);
-    final deviceSize = MediaQuery.of(context).size;
     return IntrinsicHeight(
       child: Stack(
         children: [
           Center(
             child: Container(
-              height: deviceSize.height * 0.1,
-              width: deviceSize.width * 0.95,
               alignment: Alignment.centerRight,
               decoration: BoxDecoration(
                 color: Theme.of(context).errorColor,
@@ -125,8 +122,10 @@ class ConsumptionItem extends StatelessWidget {
             direction: DismissDirection.endToStart,
             child: Center(
               child: Container(
-                height: deviceSize.height * 0.115,
-                width: deviceSize.width * 0.95,
+                // width: deviceSize.width * 0.95,
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ),
                 child: CustomCard(
                   child: Container(
                     decoration: BoxDecoration(
