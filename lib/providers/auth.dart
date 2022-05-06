@@ -6,11 +6,11 @@ import '../models/http_exception.dart';
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/shared_data.dart';
+
 class Auth with ChangeNotifier {
-  final Uri _singUpUrl = Uri.parse(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyB3Picvg7XX9hTg8cWZRg2Kt17qm3Zmow8');
-  final Uri _singInUrl = Uri.parse(
-      'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyB3Picvg7XX9hTg8cWZRg2Kt17qm3Zmow8');
+  final Uri _singUpUrl = Uri.parse(Urls.signUpUrl);
+  final Uri _singInUrl = Uri.parse(Urls.signUpUrl);
 
   String? _token;
   DateTime? _expiryDate;
